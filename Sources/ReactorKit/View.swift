@@ -8,6 +8,14 @@
 
 #if !os(Linux)
 import RxSwift
+  
+#if os(iOS) || os(tvOS)
+import UIKit
+private typealias OSViewController = UIViewController
+#elseif os(OSX)
+import AppKit
+private typealias OSViewController = NSViewController
+#endif
 
 /// A View displays data. A view controller and a cell are treated as a view. The view binds user
 /// inputs to the action stream and binds the view states to each UI component. There's no business
@@ -59,9 +67,17 @@ extension View {
       self.setAssociatedObject(newValue, forKey: &reactorKey)
       self.disposeBag = DisposeBag()
       if let reactor = newValue {
+        self.loadViewIfNeeded()
         self.bind(reactor: reactor)
       }
     }
+  }
+  
+  fileprivate func loadViewIfNeeded() {
+    guard let viewController = self as? OSViewController, !viewController.isViewLoaded else {
+      return
+    }
+    _ = viewController.view
   }
 }
 #endif
