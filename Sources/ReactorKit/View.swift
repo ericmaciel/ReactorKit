@@ -8,6 +8,7 @@
 
 #if !os(Linux)
 import RxSwift
+import WeakMapTable
   
 #if os(iOS) || os(tvOS)
 import UIKit
@@ -55,13 +56,6 @@ public protocol View: class {
   /// - warning: It's not recommended to call this method directly.
   func bind(reactor: Reactor)
 }
-
-
-// MARK: - Associated Object Keys
-
-var reactorKey = "reactor"
-var isReactorBindedKey = "isReactorBinded"
-
 
 // MARK: - Default Implementations
 
